@@ -21,7 +21,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductListSerializer(serializers.ModelSerializer):
-    """Lightweight — for the catalogue grid, not the full detail page."""
     category = CategorySerializer(read_only=True)
     price_naira = serializers.ReadOnlyField()
     thumbnail = serializers.SerializerMethodField()
@@ -41,7 +40,6 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
-    """Full product page — everything from the content template."""
     category = CategorySerializer(read_only=True)
     concerns = ConcernSerializer(many=True, read_only=True)
     images = ProductImageSerializer(many=True, read_only=True)
@@ -51,5 +49,20 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         exclude = ["price_kobo", "compare_at_price_kobo", "search_terms"]
-        # price_kobo hidden on purpose — customers see price_naira, not raw kobo.
-        # search_terms is internal, never shown on the page.
+
+
+class CategoryAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "name", "slug", "tradition", "is_active"]
+        read_only_fields = ["slug"]
+
+
+class ProductAdminSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True, read_only=True)
+    price_naira = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Product
+        fields = "__all__"
+        read_only_fields = ["slug", "created_at", "updated_at"]

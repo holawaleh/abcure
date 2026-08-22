@@ -1,9 +1,11 @@
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, permissions, parsers
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Category, Concern, Product
+from .models import Category, Concern, Product, ProductImage
 from .serializers import (
     CategorySerializer, ConcernSerializer,
     ProductListSerializer, ProductDetailSerializer,
+    CategoryAdminSerializer, ProductAdminSerializer,
+    ProductImageSerializer,
 )
 
 
@@ -36,3 +38,25 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         if page_size:
             self.paginator.page_size = int(page_size)
         return queryset
+
+
+class AdminCategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategoryAdminSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class AdminProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all().select_related("category").prefetch_related("concerns", "images")
+    serializer_class = ProductAdminSerializer
+    permission_classes = [permissions.IsAdminUser]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ["category", "is_published"]
+    search_fields = ["name", "sku"]
+
+
+class AdminProductImageViewSet(viewsets.ModelViewSet):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer
+    permission_classes = [permissions.IsAdminUser]
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
