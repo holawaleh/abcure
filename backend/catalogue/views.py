@@ -20,7 +20,7 @@ class ConcernViewSet(viewsets.ReadOnlyModelViewSet):
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.filter(is_published=True).select_related("category").prefetch_related("concerns", "images")
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ["category__tradition", "category__slug", "form"]
+    filterset_fields = ["category__tradition", "category__slug", "form", "is_featured"]
     search_fields = ["name", "brief", "search_terms"]
     ordering_fields = ["price_kobo", "created_at"]
     lookup_field = "slug"
@@ -29,3 +29,10 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == "list":
             return ProductListSerializer
         return ProductDetailSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        page_size = self.request.query_params.get("page_size")
+        if page_size:
+            self.paginator.page_size = int(page_size)
+        return queryset
