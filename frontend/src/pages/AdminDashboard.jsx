@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { getErrorMessage } from "../api/errors";
+import Navbar from "../components/Navbar";
 
 const FORM_CHOICES = ["soap", "oil", "powder", "capsule", "tea", "cream", "liquid", "other"];
 const SIZE_UNITS = ["g", "kg", "ml", "l", "piece"];
@@ -100,14 +101,7 @@ function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-brand-cream">
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-brand-dark">AB Cure Admin</h1>
-          <button onClick={logout} className="text-sm text-gray-500 hover:text-brand-dark">
-            Log out
-          </button>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm p-6 space-y-4">
@@ -211,7 +205,7 @@ function AdminDashboard() {
               {products.map((p) => (
                 <tr key={p.id} className="border-b border-gray-50">
                   <td className="px-6 py-3">{p.name}</td>
-                  <td className="px-6 py-3">?{(p.price_kobo / 100).toLocaleString()}</td>
+                  <td className="px-6 py-3">{"\u20A6"}{(p.price_kobo / 100).toLocaleString()}</td>
                   <td className="px-6 py-3">{p.stock}</td>
                   <td className="px-6 py-3">{p.is_published ? "Yes" : "No"}</td>
                   <td className="px-6 py-3 text-right space-x-3">

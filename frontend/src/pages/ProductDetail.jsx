@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../api/client";
+import Navbar from "../components/Navbar";
 
 function ProductDetail() {
   const { slug } = useParams();
@@ -22,22 +23,18 @@ function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-brand-cream">
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <Link to="/" className="text-brand-dark font-bold text-xl">AB Cure</Link>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="max-w-5xl mx-auto px-4 py-8">
         <Link to="/" className="text-sm text-brand hover:underline">Back to shop</Link>
 
         <div className="grid md:grid-cols-2 gap-8 mt-4">
-          <div className="aspect-square bg-white rounded-xl flex items-center justify-center overflow-hidden">
+          <div className="aspect-square bg-white rounded-xl flex items-center justify-center overflow-hidden group">
             {product.images && product.images.length > 0 ? (
               <img
                 src={product.images[0].image}
                 alt={product.images[0].alt_text}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             ) : (
               <span className="text-brand-light">No image yet</span>

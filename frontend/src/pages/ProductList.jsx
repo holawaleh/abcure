@@ -4,6 +4,7 @@ import ProductCard from "../components/ProductCard";
 import CategorySidebar from "../components/CategorySidebar";
 import PromoBanner from "../components/PromoBanner";
 import Pagination from "../components/Pagination";
+import Navbar from "../components/Navbar";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
@@ -35,18 +36,7 @@ function ProductList() {
 
   return (
     <div className="min-h-screen bg-brand-cream">
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold text-brand-dark shrink-0">AB Cure</h1>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search products..."
-            className="w-full max-w-xs px-4 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
-          />
-        </div>
-      </header>
+      <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
         <PromoBanner />
@@ -55,6 +45,14 @@ function ProductList() {
           <CategorySidebar activeCategory={category} onCategoryChange={setCategory} />
 
           <div className="flex-1">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search products..."
+              className="w-full mb-4 px-4 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand transition-shadow"
+            />
+
             {loading && <p className="text-center text-gray-400 py-12">Loading products...</p>}
             {error && <p className="text-center text-red-500 py-12">Something went wrong: {error}</p>}
             {!loading && !error && products.length === 0 && (
