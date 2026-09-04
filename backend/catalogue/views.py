@@ -60,3 +60,5 @@ class AdminProductImageViewSet(viewsets.ModelViewSet):
     serializer_class = ProductImageSerializer
     permission_classes = [permissions.IsAdminUser]
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["product"]

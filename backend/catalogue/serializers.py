@@ -17,7 +17,8 @@ class ConcernSerializer(serializers.ModelSerializer):
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = ["id", "image", "alt_text", "order"]
+        fields = ["id", "product", "image", "alt_text", "order"]
+        extra_kwargs = {"product": {"write_only": True}}
 
 
 class ProductListSerializer(serializers.ModelSerializer):
